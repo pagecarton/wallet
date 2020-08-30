@@ -46,7 +46,6 @@ class Application_Wallet_Settings extends PageCarton_Settings
 				$settings = $values;
 			}
 		}
-	//	$settings = unserialize( @$values['settings'] ) ? : $values['settings'];
         $form = new Ayoola_Form( array( 'name' => $this->getObjectName() ) );
 		$form->submitValue = $submitValue ;
 		$form->oneFieldSetAtATime = true;

@@ -131,6 +131,8 @@ class Application_Wallet_Payment extends Application_Subscription_Checkout_Abstr
                     header( 'Location: ' . $parameters['success_url'] );
                     return true;
                 }
+                $this->setViewContent( self::__( '<p class="badnews">Payment with wallet balance failed.</p>' ) ); 
+                return false;
             }
 
             //  Output demo content to screen
