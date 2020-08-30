@@ -60,6 +60,7 @@ class Application_Wallet_Payment extends Application_Subscription_Checkout_Abstr
         $totalPrice = $totalPrice;
 
         $balance = (float) Ayoola_Application::getUserInfo( 'wallet_balance' );
+
         if( $totalPrice > $balance )
         { 
             return false;
@@ -118,21 +119,16 @@ class Application_Wallet_Payment extends Application_Subscription_Checkout_Abstr
             {
                 $orderNumber = self::getOrderNumber(  );
 				$transferInfo = array();
-				$transferInfo['allow_ghost_sender'] = true;
 				$transferInfo['to'] = Application_Wallet_Settings::retrieve( 'main_wallet_username' );
 				$transferInfo['from'] = Ayoola_Application::getUserInfo( 'username' );
 				$transferInfo['amount'] = $parameters['amount'];
                 $transferInfo['notes'] = 'Payment for order';
                 if( $paid = Application_Wallet::transfer( $transferInfo ) )
                 {
-
                     $response = Application_Subscription_Checkout::changeStatus( array( 'order_status' => 99, 'order_id' => $parameters['order_number'] ) );
-                    //    var_export( $response );
                     header( 'Location: ' . $parameters['success_url'] );
                     return true;
                 }
-                $this->setViewContent( self::__( '<p class="badnews">Payment with wallet balance failed.</p>' ) ); 
-                return false;
             }
 
             //  Output demo content to screen
