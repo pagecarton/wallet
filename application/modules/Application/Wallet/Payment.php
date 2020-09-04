@@ -57,7 +57,11 @@ class Application_Wallet_Payment extends Application_Subscription_Checkout_Abstr
             $counter++;
         }
 
-        $totalPrice = $totalPrice;
+        $cartInfo = Application_Subscription_Cart::viewInLine( array( 'return_object_data' => true, 'play_mode' => self::PLAY_MODE_JSON ) );
+        if( isset( $cartInfo['grand_total_price'] ) )
+        {
+            $totalPrice = $cartInfo['grand_total_price'];
+        }
 
         $balance = (float) Ayoola_Application::getUserInfo( 'wallet_balance' );
 
@@ -106,7 +110,13 @@ class Application_Wallet_Payment extends Application_Subscription_Checkout_Abstr
             }
 
             $parameters['amount'] = ( $this->getParameter( 'amount' ) ? : $parameters['price'] );
-    
+
+            $cartInfo = Application_Subscription_Cart::viewInLine( array( 'return_object_data' => true, 'play_mode' => self::PLAY_MODE_JSON ) );
+            if( isset( $cartInfo['grand_total_price'] ) )
+            {
+                $parameters['amount'] = $cartInfo['grand_total_price'];
+            }
+        
             $balance = (float) Ayoola_Application::getUserInfo( 'wallet_balance' );
             if( $parameters['amount'] > $balance )
             { 
